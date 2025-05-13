@@ -22,6 +22,14 @@ struct Home: View {
                     }
                 }
                 .padding()
+                Image(systemName: "tray")
+                    .resizable()
+                    .frame(width: 70, height: 50)
+                    .aspectRatio(contentMode: .fill)
+                    .padding()
+                    .foregroundStyle(.gray)
+                Text("Rien à voir ici...")
+                    .foregroundStyle(.gray)
             }
         }
         .overlay {
@@ -38,13 +46,13 @@ struct Home: View {
         Button {
             print("Add Story")
         } label: {
-            Image("avatar1")
+            Image("avatar0")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .clipShape(Circle())
                 .padding(2)
                 .background(.blue, in: Circle())
-                .frame(width: 50, height: 50)
+                .frame(width: 60, height: 60)
         }
     }
 }
@@ -73,7 +81,7 @@ struct StoryUserView: View {
                     .clipShape(Circle())
                     .opacity(story.seen ? 0.2 : 1)
                 }
-                .frame(width: 50, height: 50)
+                .frame(width: 60, height: 60)
         }
     }
 }

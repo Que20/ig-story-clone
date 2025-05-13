@@ -34,6 +34,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/Story.swift,
+				View/Home.swift,
 				ViewModel/StoryViewModel.swift,
 			);
 			target = 0A22075A2DD3D2B4001E1C22 /* IG-storyTests */;

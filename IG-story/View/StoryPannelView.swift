@@ -9,38 +9,74 @@ import SwiftUI
 
 struct StoryPannelView: View {
     @EnvironmentObject private var viewModel: StoryViewModel
-    
+    @State private var currentIndex = 0
     var body: some View {
         if viewModel.storyPannelPresented {
             TabView(selection: $viewModel.currentStory) {
                 ForEach(viewModel.stories) { story in
-                    HStack {
-                        Text(story.owner.name)
-                            .foregroundStyle(.white)
-                        Button("close") {
-                            withAnimation {
-                                viewModel.storyPannelPresented = false
-                            }
-                        }
-                    }
+                    storyView(story)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.black)
-            .transition(.offset(y: screenSize.height + 50))
+            .transition(.offset(y: {
+                return (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow?.screen.bounds.size.height ?? .zero
+            }()))
         }
     }
     
-    var screenSize: CGSize {
-        if let screen = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow?.screen {
-            return screen.bounds.size
+    func storyView(_ story: Story) -> some View {
+        GeometryReader { proxy in
+            Image(story.posts[currentIndex].image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .clipped()
         }
-        
-        return .zero
+        .overlay {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(story.owner.name)
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Button {
+                        withAnimation {
+                            viewModel.storyPannelPresented = false
+                        }
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundStyle(.white)
+                    }
+                }
+                HStack {
+                    Rectangle()
+                        .fill(.clear)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if currentIndex == 0 {
+                                viewModel.currentStory = viewModel.stories[(viewModel.stories.firstIndex(of: story) ?? 0) - 1].id
+                            } else {
+                                currentIndex = max(currentIndex - 1, 0)
+                            }
+                        }
+                    Rectangle()
+                        .fill(.clear)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if currentIndex == story.posts.count - 1 {
+                                viewModel.currentStory = viewModel.stories[(viewModel.stories.firstIndex(of: story) ?? 0) + 1].id
+                            } else {
+                                currentIndex += 1
+                            }
+                        }
+                }
+            }
+        }
     }
 }
 
 #Preview {
     StoryPannelView()
+        .environmentObject(StoryViewModel())
 }

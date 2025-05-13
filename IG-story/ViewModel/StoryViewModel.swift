@@ -6,7 +6,7 @@ class StoryViewModel: ObservableObject {
     @Published var currentStory: UUID = UUID()
     
     func fetchStories() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
             self.stories = [
                 .init(id: .init(), owner: .init(id: .init(), name: "Ben", avatar: "avatar1"), seen: false, posts: [.init(id: .init(), image: "story1")]),
                 .init(id: .init(), owner: .init(id: .init(), name: "Eva", avatar: "avatar2"), seen: false, posts: [.init(id: .init(), image: "story2"), .init(id: .init(), image: "story3")]),

@@ -6,11 +6,15 @@ struct User: Identifiable {
     var avatar: String
 }
 
-struct Story: Identifiable {
+struct Story: Identifiable, Equatable {
     var id: UUID
     var owner: User
     var seen: Bool
     var posts: [Post]
+    
+    static func == (lhs: Story, rhs: Story) -> Bool {
+        return lhs.id == rhs.id
+    }
     
     struct Post: Identifiable {
         var id: UUID

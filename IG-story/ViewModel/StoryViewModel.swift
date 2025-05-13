@@ -15,4 +15,24 @@ class StoryViewModel: ObservableObject {
             ]
         }
     }
+    
+    func previousStoryOrClose() {
+        guard let index = stories.firstIndex(of: stories.first(where: { $0.id == currentStory })!) else { return }
+        let previousIndex = index - 1
+        if previousIndex < 0 {
+            storyPannelPresented = false
+            return
+        }
+        currentStory = stories[previousIndex].id
+    }
+    
+    func nextStoryOrClose() {
+        guard let index = stories.firstIndex(of: stories.first(where: { $0.id == currentStory })!) else { return }
+        let nextIndex = index + 1
+        if nextIndex >= stories.count {
+            storyPannelPresented = false
+            return
+        }
+        currentStory = stories[nextIndex].id
+    }
 }

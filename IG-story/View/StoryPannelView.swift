@@ -28,11 +28,15 @@ struct StoryPannelView: View {
     
     func storyView(_ story: Story) -> some View {
         GeometryReader { proxy in
-            Image(story.posts[currentIndex].image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .clipped()
+            if story.posts.indices.contains(currentIndex) {
+                Image(story.posts[currentIndex].image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
+            } else {
+                Rectangle()
+            }
         }
         .overlay {
             VStack(alignment: .leading) {
@@ -55,7 +59,10 @@ struct StoryPannelView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             if currentIndex == 0 {
-                                viewModel.currentStory = viewModel.stories[(viewModel.stories.firstIndex(of: story) ?? 0) - 1].id
+                                withAnimation {
+                                    viewModel.previousStoryOrClose()
+                                    currentIndex = 0
+                                }
                             } else {
                                 currentIndex = max(currentIndex - 1, 0)
                             }
@@ -64,8 +71,11 @@ struct StoryPannelView: View {
                         .fill(.clear)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            if currentIndex == story.posts.count - 1 {
-                                viewModel.currentStory = viewModel.stories[(viewModel.stories.firstIndex(of: story) ?? 0) + 1].id
+                            if currentIndex >= story.posts.count - 1 {
+                                withAnimation {
+                                    viewModel.nextStoryOrClose()
+                                    currentIndex = 0
+                                }
                             } else {
                                 currentIndex += 1
                             }

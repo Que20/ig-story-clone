@@ -54,7 +54,6 @@ struct StoryUserView: View {
     @EnvironmentObject var viewModel: StoryViewModel
     var body: some View {
         Button {
-            print("Show Story")
             story.seen = true
             withAnimation {
                 viewModel.currentStory = story.id

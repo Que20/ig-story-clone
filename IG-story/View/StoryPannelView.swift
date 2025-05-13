@@ -7,9 +7,48 @@
 
 import SwiftUI
 
+struct ProgressBarView: View {
+    @Binding var progress: Double
+    var onComplete: (() -> Void)
+    @State private var secondsElapsed: Int = 0
+    @State private var isRunning = false
+
+    let totalDuration: Int = 4
+    let timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        ProgressView(value: progress)
+            .progressViewStyle(LinearProgressViewStyle())
+        .onAppear {
+            secondsElapsed = 0
+            progress = 0.1
+            isRunning = true
+        }
+        .onReceive(timer) { _ in
+            guard isRunning else { return }
+
+            if secondsElapsed < totalDuration {
+                secondsElapsed += 1
+                progress = Double(secondsElapsed) / Double(totalDuration)
+            } else {
+                isRunning = false
+                onComplete()
+                
+                secondsElapsed = 0
+                progress = 0.1
+                isRunning = true
+            }
+        }
+    }
+}
+
+
 struct StoryPannelView: View {
     @EnvironmentObject private var viewModel: StoryViewModel
+    
     @State private var currentIndex = 0
+    @State private var progress: Double = 0
+    
     var body: some View {
         if viewModel.storyPannelPresented {
             TabView(selection: $viewModel.currentStory) {
@@ -42,7 +81,7 @@ struct StoryPannelView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text(story.owner.name)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.blue)
                     Spacer()
                     Button {
                         withAnimation {
@@ -50,9 +89,21 @@ struct StoryPannelView: View {
                         }
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.blue)
                     }
                 }
+                .padding(.horizontal)
+                ProgressBarView(progress: $progress, onComplete: {
+                    if currentIndex >= story.posts.count {
+                        withAnimation {
+                            viewModel.nextStoryOrClose()
+                            currentIndex = 0
+                        }
+                    } else {
+                        currentIndex += 1
+                    }
+                })
+                    .padding(.horizontal)
                 HStack {
                     Rectangle()
                         .fill(.clear)

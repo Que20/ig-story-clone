@@ -24,9 +24,13 @@ struct Home: View {
                 .padding()
             }
         }
+        .overlay {
+            StoryPannelView()
+        }
         .task {
             viewModel.fetchStories()
         }
+        .environmentObject(viewModel)
     }
     
     func selfAvatar() -> some View {
@@ -47,10 +51,15 @@ struct Home: View {
 
 struct StoryUserView: View {
     @Binding var story: Story
+    @EnvironmentObject var viewModel: StoryViewModel
     var body: some View {
         Button {
             print("Show Story")
             story.seen = true
+            withAnimation {
+                viewModel.currentStory = story.id
+                viewModel.storyPannelPresented = true
+            }
         } label: {
             Image(story.owner.avatar)
                 .resizable()

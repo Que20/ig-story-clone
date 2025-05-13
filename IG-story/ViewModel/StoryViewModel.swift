@@ -2,6 +2,8 @@ import SwiftUI
 
 class StoryViewModel: ObservableObject {
     @Published var stories: [Story] = []
+    @Published var storyPannelPresented: Bool = false
+    @Published var currentStory: UUID = UUID()
     
     func fetchStories() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

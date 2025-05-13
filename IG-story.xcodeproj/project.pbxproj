@@ -29,9 +29,23 @@
 		0A2207652DD3D2B4001E1C22 /* IG-storyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IG-storyUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0A82854F2DD3D3DA0062502D /* Exceptions for "IG-story" folder in "IG-storyTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/Story.swift,
+				ViewModel/StoryViewModel.swift,
+			);
+			target = 0A22075A2DD3D2B4001E1C22 /* IG-storyTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0A2207502DD3D2B2001E1C22 /* IG-story */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0A82854F2DD3D3DA0062502D /* Exceptions for "IG-story" folder in "IG-storyTests" target */,
+			);
 			path = "IG-story";
 			sourceTree = "<group>";
 		};

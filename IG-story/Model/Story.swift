@@ -3,7 +3,7 @@ import SwiftUI
 struct User: Identifiable {
     var id: UUID
     var name: String
-    var avatar: URL
+    var avatar: String
 }
 
 struct Story: Identifiable {
@@ -14,7 +14,7 @@ struct Story: Identifiable {
     
     struct Post: Identifiable {
         var id: UUID
-        var image: URL
+        var image: String
         var stats: Stats?
         
         struct Stats {
